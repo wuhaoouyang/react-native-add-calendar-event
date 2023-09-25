@@ -43,7 +43,7 @@ export const transformConfigColors = config => {
 
 const withPermissionsCheck = toCallWhenPermissionGranted => {
   if (Platform.OS === 'android') {
-    return withPermissionsCheckAndroid(toCallWhenPermissionGranted);
+    return toCallWhenPermissionGranted();
   } else {
     return withPermissionsCheckIOS(toCallWhenPermissionGranted);
   }

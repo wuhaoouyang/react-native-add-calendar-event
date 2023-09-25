@@ -88,25 +88,26 @@ public class AddCalendarEventModule extends ReactContextBaseJavaModule implement
 
             final Intent calendarIntent = new Intent(Intent.ACTION_INSERT);
             calendarIntent
-                    .setType("vnd.android.cursor.item/event")
-                    .putExtra("title", config.getString("title"));
+                    .setData(CalendarContract.Events.CONTENT_URI)
+                    .putExtra(CalendarContract.Events.TITLE, config.getString("title"))
+                    .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY);
 
             if (config.hasKey("startDate")) {
-                calendarIntent.putExtra("beginTime", getTimestamp(config.getString("startDate")));
+                calendarIntent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, getTimestamp(config.getString("startDate")));
             }
 
             if (config.hasKey("endDate")) {
-                calendarIntent.putExtra("endTime", getTimestamp(config.getString("endDate")));
+                calendarIntent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, getTimestamp(config.getString("endDate")));
             }
 
             if (config.hasKey("location")
                     && config.getString("location") != null) {
-                calendarIntent.putExtra("eventLocation", config.getString("location"));
+                calendarIntent.putExtra(CalendarContract.Events.EVENT_LOCATION, config.getString("location"));
             }
 
             if (config.hasKey("notes")
                     && config.getString("notes") != null) {
-                calendarIntent.putExtra("description", config.getString("notes"));
+                calendarIntent.putExtra(CalendarContract.Events.DESCRIPTION, config.getString("notes"));
             }
 
             if (config.hasKey("allDay")) {

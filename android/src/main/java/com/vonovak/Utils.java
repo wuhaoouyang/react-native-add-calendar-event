@@ -39,20 +39,21 @@ public class Utils {
   }
 
   static boolean doesEventExist(ContentResolver cr, long eventId) {
-    Uri uri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, (eventId));
+    return false;
+    // Uri uri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, (eventId));
 
-    String selection = "((" + CalendarContract.Events.DELETED + " != 1))";
+    // String selection = "((" + CalendarContract.Events.DELETED + " != 1))";
 
-    Cursor cursor = cr.query(uri, new String[]{
-            CalendarContract.Events._ID,
-    }, selection, null, null);
+    // Cursor cursor = cr.query(uri, new String[]{
+    //         CalendarContract.Events._ID,
+    // }, selection, null, null);
 
-    if (cursor != null && cursor.getCount() > 0) {
-      cursor.close();
-      return true;
-    } else {
-      return false;
-    }
+    // if (cursor != null && cursor.getCount() > 0) {
+    //   cursor.close();
+    //   return true;
+    // } else {
+    //   return false;
+    // }
   }
 
   static boolean doesEventExist(ContentResolver cr, String eventId) {
