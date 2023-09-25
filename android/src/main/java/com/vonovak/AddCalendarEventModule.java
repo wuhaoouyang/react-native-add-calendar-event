@@ -24,7 +24,7 @@ import static com.vonovak.Utils.extractLastEventId;
 import static com.vonovak.Utils.getTimestamp;
 
 
-public class AddCalendarEventModule extends ReactContextBaseJavaModule implements ActivityEventListener, LoaderManager.LoaderCallbacks {
+public class AddCalendarEventModule extends ReactContextBaseJavaModule implements ActivityEventListener {
 
     public static final String ADD_EVENT_MODULE_NAME = "AddCalendarEvent";
     private static final int ADD_EVENT_REQUEST_CODE = 11;
@@ -165,7 +165,6 @@ public class AddCalendarEventModule extends ReactContextBaseJavaModule implement
 
     private void setPriorEventId(Activity activity) {
         if (activity != null) {
-            activity.getLoaderManager().initLoader(PRIOR_RESULT_ID, null, this);
         }
     }
 
@@ -179,35 +178,7 @@ public class AddCalendarEventModule extends ReactContextBaseJavaModule implement
 
     private void setPostEventId(Activity activity) {
         if (activity != null) {
-            activity.getLoaderManager().initLoader(POST_RESULT_ID, null, this);
         }
-    }
-
-    // TODO get rid of the loaders?
-    @Override
-    public Loader onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(getReactApplicationContext(),
-                CalendarContract.Events.CONTENT_URI,
-                new String[]{"MAX(_id) as max_id"}, null, null, "_id");
-    }
-
-    @Override
-    public void onLoadFinished(Loader loader, Object data) {
-        Cursor cursor = (Cursor) data;
-        if (cursor.isClosed()) {
-            Log.d(ADD_EVENT_MODULE_NAME, "cursor was closed; loader probably wasn't destroyed previously (destroyLoader() failed)");
-            rejectPromise("cursor was closed");
-            return;
-        }
-        Long lastEventId = extractLastEventId(cursor);
-
-        if (loader.getId() == PRIOR_RESULT_ID) {
-            eventPriorId = lastEventId;
-        } else if (loader.getId() == POST_RESULT_ID) {
-            returnResultBackToJS(lastEventId);
-        }
-
-        destroyLoader(loader);
     }
 
     private void returnResultBackToJS(@Nullable Long eventPostId) {
@@ -268,10 +239,6 @@ public class AddCalendarEventModule extends ReactContextBaseJavaModule implement
         } else {
             Log.d(ADD_EVENT_MODULE_NAME, "activity was null when attempting to destroy the loader");
         }
-    }
-
-    @Override
-    public void onLoaderReset(Loader loader) {
     }
 
     @Override
